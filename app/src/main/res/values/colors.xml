@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="persimmon">#ff5c5c</color>
+    <color name="golden_tainoi">#ffd166</color>
+    <color name="calypso">#3c799a</color>
+    <color name="calypsssso">#FF8066</color>
+
+    <color name="color_app">#0081FF</color>
+    <color name="background_button">#FF9671</color>
+    <color name="background_text_field">#DFFBEAFF</color>
+    <color name="disabled_button">#C5C3C8</color>
+    <color name="activate_button">#70ae3d</color>
+
 </resources>

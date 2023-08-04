@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">RadioSerch</string>
+
+    <!--token web client id-->
+    <string name="default_web_client_id">534898762311-g60mn13gfqahaqttle673cvjfrhrcbv2.apps.googleusercontent.com</string>
+
+    <!--name components login-->
+    <string name="text_field_email">Email</string>
+    <string name="text_field_password">Password</string>
+    <string name="button_login">Inicia sesion</string>
+    <string name="button_register">Registrate</string>
+    <string name="text_register_here">Registrate aqui</string>
+    <string name="text_login_here">Inicia sesion aqui</string>
+    <string name="text_register">No tienes una cuenta?</string>
+    <string name="text_login">Ya tienes una cuenta?</string>
+    <string name="continue_login">O continua con: </string>
+
+
 </resources>
