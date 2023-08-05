@@ -1,4 +1,4 @@
-package com.example.radioserch.features.login.presentation.component
+package com.example.radioserch.features.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.example.radioserch.R
 
 @Composable
-fun LoginButton(loginEnabled: Boolean, textButton: String, onLoginSelected: () -> Unit) {
+fun CustomStyleButton(loginEnabled: Boolean, textButton: String, onLoginSelected: () -> Unit) {
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -35,7 +35,7 @@ fun LoginButton(loginEnabled: Boolean, textButton: String, onLoginSelected: () -
                 contentColor = Color.Black
             )
         ) {
-            Text(text = textButton,fontSize = 15.sp,)
+            Text(text = textButton, fontSize = 15.sp)
         }
     }
 

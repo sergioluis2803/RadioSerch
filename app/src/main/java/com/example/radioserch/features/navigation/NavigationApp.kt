@@ -6,9 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.radioserch.features.home.presentation.HomeScreen
 import com.example.radioserch.features.login.presentation.LoginScreen
-import com.example.radioserch.features.login.presentation.LoginViewModel
 import com.example.radioserch.features.register.presentation.RegisterScreen
-import com.example.radioserch.features.register.presentation.RegisterViewModel
 import com.example.radioserch.features.splash.SplashScreen
 
 @Composable
@@ -25,11 +23,11 @@ fun NavigationApp() {
         }
 
         composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController, LoginViewModel())
+            LoginScreen(navController = navController)
         }
 
         composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController, RegisterViewModel())
+            RegisterScreen(navController = navController)
         }
 
         composable(Screen.HomeScreen.route) {

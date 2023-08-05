@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.example.radioserch.R
-import com.example.radioserch.features.login.presentation.component.IconApp
+import com.example.radioserch.features.common.IconApp
 
 @Composable
 fun Splash() {

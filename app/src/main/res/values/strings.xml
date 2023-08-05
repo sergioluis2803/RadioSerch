@@ -14,6 +14,11 @@
     <string name="text_register">No tienes una cuenta?</string>
     <string name="text_login">Ya tienes una cuenta?</string>
     <string name="continue_login">O continua con: </string>
+    <string name="text_help_password">Ingresar mínimo 6 caracteres </string>
 
+    <!--messages error-->
+    <string name="again">Reintentar</string>
+    <string name="title_dialog">Hubo un problema</string>
+    <string name="body_dialog">Se produjo un error. Por favor intenta de nuevo en un momento.</string>
 
 </resources>

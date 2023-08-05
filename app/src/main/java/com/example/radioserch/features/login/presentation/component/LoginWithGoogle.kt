@@ -23,8 +23,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.radioserch.R
+import com.example.radioserch.features.dialog.DialogApp
 import com.example.radioserch.features.login.presentation.LoginViewModel
 import com.example.radioserch.features.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,6 +38,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 fun LoginWithGoogle(navController: NavController, viewModel: LoginViewModel) {
     val token = stringResource(id = R.string.default_web_client_id)
     val context = LocalContext.current
+
+    val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -51,8 +55,12 @@ fun LoginWithGoogle(navController: NavController, viewModel: LoginViewModel) {
                 }
             }
         } catch (error: Exception) {
-            Log.d("MENSAJE", "google fallo: ${error.message} - ${error.localizedMessage}")
+            Log.d("MESSAGE", "GOOGLE FAILURE")
         }
+    }
+
+    if (showErrorDialog.value) {
+        DialogApp { viewModel.dismissErrorDialog() }
     }
 
     Row(

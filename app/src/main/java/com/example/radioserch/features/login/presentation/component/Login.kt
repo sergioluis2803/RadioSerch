@@ -2,16 +2,17 @@ package com.example.radioserch.features.login.presentation.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,11 +24,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.radioserch.R
+import com.example.radioserch.features.common.CustomStyleButton
+import com.example.radioserch.features.common.CustomStyleProgressIndicator
+import com.example.radioserch.features.common.CustomStyleTextField
+import com.example.radioserch.features.common.IconApp
+import com.example.radioserch.features.common.TextQuestion
+import com.example.radioserch.features.dialog.DialogApp
 import com.example.radioserch.features.login.presentation.LoginViewModel
 import com.example.radioserch.features.navigation.Screen
 
@@ -82,8 +90,13 @@ fun FormUserLoginIn(
     val password by viewModel.password.collectAsStateWithLifecycle()
     val loginEnabled by viewModel.loginEnabled.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
 
     val passwordVisibility = mutableStateOf(false)
+
+    if (showErrorDialog.value) {
+        DialogApp { viewModel.dismissErrorDialog() }
+    }
 
     Column(
         modifier = modifier,
@@ -107,35 +120,43 @@ fun FormUserLoginIn(
         )
         Spacer(modifier = Modifier.padding(20.dp))
 
-        EmailField(email) { viewModel.onLoginChanged(it, password) }
+        CustomStyleTextField(
+            text = email,
+            labelText = stringResource(id = R.string.text_field_email),
+            onValueChanged = { viewModel.onLoginChanged(it, password) },
+            keyboardType = KeyboardType.Email,
+            iconTextField = Icons.Default.Email,
+            isTextPassword = false,
+            passwordVisible = passwordVisibility
+        )
         Spacer(modifier = Modifier.padding(8.dp))
 
-        PasswordField(password, passwordVisibility) { viewModel.onLoginChanged(email, it) }
+        CustomStyleTextField(
+            text = password,
+            labelText = stringResource(id = R.string.text_field_password),
+            onValueChanged = { viewModel.onLoginChanged(email, it) },
+            keyboardType = KeyboardType.Password,
+            iconTextField = Icons.Default.Lock,
+            isTextPassword = true,
+            passwordVisible = passwordVisibility
+        )
         Spacer(modifier = Modifier.padding(20.dp))
 
         if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            CustomStyleProgressIndicator()
         } else {
-            LoginButton(
+            CustomStyleButton(
                 loginEnabled = loginEnabled,
                 textButton = stringResource(id = R.string.button_login)
             ) {
                 viewModel.userOnLogin(
-                    email,
-                    password
-                ) {
-                    navController.navigate(Screen.HomeScreen.route) {
-                        popUpTo(Screen.LoginScreen.route) {
-                            inclusive = true
-                        }
+                    email = email,
+                    password = password,
+                    success = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.HomeScreen.route)
                     }
-
-                }
+                )
             }
         }
         Spacer(modifier = Modifier.padding(20.dp))

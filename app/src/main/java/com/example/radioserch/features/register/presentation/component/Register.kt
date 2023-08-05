@@ -2,16 +2,17 @@ package com.example.radioserch.features.register.presentation.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,22 +24,24 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.radioserch.R
-import com.example.radioserch.features.login.presentation.component.EmailField
-import com.example.radioserch.features.login.presentation.component.IconApp
-import com.example.radioserch.features.login.presentation.component.LoginButton
-import com.example.radioserch.features.login.presentation.component.PasswordField
-import com.example.radioserch.features.login.presentation.component.TextQuestion
+import com.example.radioserch.features.dialog.DialogApp
+import com.example.radioserch.features.common.CustomStyleTextField
+import com.example.radioserch.features.common.IconApp
+import com.example.radioserch.features.common.CustomStyleButton
+import com.example.radioserch.features.common.CustomStyleProgressIndicator
+import com.example.radioserch.features.common.TextQuestion
+import com.example.radioserch.features.login.presentation.LoginViewModel
 import com.example.radioserch.features.navigation.Screen
-import com.example.radioserch.features.register.presentation.RegisterViewModel
 
 @Composable
 fun Register(
-    viewModel: RegisterViewModel,
+    viewModel: LoginViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +50,6 @@ fun Register(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.padding(20.dp))
         IconApp(modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.padding(40.dp))
@@ -58,7 +60,7 @@ fun Register(
 
 @Composable
 fun ModelFormRegister(
-    viewModel: RegisterViewModel,
+    viewModel: LoginViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -80,7 +82,7 @@ fun ModelFormRegister(
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun FormUserRegister(
-    viewModel: RegisterViewModel,
+    viewModel: LoginViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -89,8 +91,13 @@ fun FormUserRegister(
     val password by viewModel.password.collectAsStateWithLifecycle()
     val loginEnabled by viewModel.loginEnabled.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
 
     val passwordVisibility = mutableStateOf(false)
+
+    if (showErrorDialog.value) {
+        DialogApp { viewModel.dismissErrorDialog() }
+    }
 
     Column(
         modifier = modifier,
@@ -114,25 +121,41 @@ fun FormUserRegister(
         )
         Spacer(modifier = Modifier.padding(20.dp))
 
-        EmailField(email) { viewModel.onLoginChanged(it, password) }
+        CustomStyleTextField(
+            text = email,
+            labelText = stringResource(id = R.string.text_field_email),
+            onValueChanged = { viewModel.onLoginChanged(it, password) },
+            keyboardType = KeyboardType.Email,
+            iconTextField = Icons.Default.Email,
+            isTextPassword = false,
+            passwordVisible = passwordVisibility
+        )
         Spacer(modifier = Modifier.padding(8.dp))
 
-        PasswordField(password, passwordVisibility) { viewModel.onLoginChanged(email, it) }
+        CustomStyleTextField(
+            text = password,
+            labelText = stringResource(id = R.string.text_field_password),
+            onValueChanged = { viewModel.onLoginChanged(email, it) },
+            keyboardType = KeyboardType.Password,
+            iconTextField = Icons.Default.Lock,
+            isTextPassword = true,
+            passwordVisible = passwordVisibility
+        )
+        Text(
+            text = stringResource(id = R.string.text_help_password),
+            fontSize = 13.sp,
+            modifier = Modifier.padding(start = 5.dp)
+        )
         Spacer(modifier = Modifier.padding(20.dp))
 
         if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            CustomStyleProgressIndicator()
         } else {
-            LoginButton(
+            CustomStyleButton(
                 loginEnabled = loginEnabled,
                 textButton = stringResource(id = R.string.button_register)
             ) {
-                viewModel.userOnRegister(
+                viewModel.createUserEmailPassword(
                     email,
                     password
                 ) {
