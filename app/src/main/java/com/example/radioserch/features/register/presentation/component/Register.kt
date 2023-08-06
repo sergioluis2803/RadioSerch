@@ -37,7 +37,8 @@ import com.example.radioserch.features.common.CustomStyleButton
 import com.example.radioserch.features.common.CustomStyleProgressIndicator
 import com.example.radioserch.features.common.TextQuestion
 import com.example.radioserch.features.login.presentation.LoginViewModel
-import com.example.radioserch.features.navigation.Screen
+import com.example.radioserch.features.navigation.util.AuthScreen
+import com.example.radioserch.features.navigation.util.Graph
 
 @Composable
 fun Register(
@@ -117,7 +118,7 @@ fun FormUserRegister(
             navController = navController,
             text1 = stringResource(id = R.string.text_login),
             text2 = stringResource(id = R.string.text_login_here),
-            routeScreen = Screen.LoginScreen.route
+            routeScreen = AuthScreen.LoginAuthScreen.route
         )
         Spacer(modifier = Modifier.padding(20.dp))
 
@@ -159,11 +160,11 @@ fun FormUserRegister(
                     email,
                     password
                 ) {
-                    navController.navigate(Screen.HomeScreen.route) {
-                        popUpTo(Screen.RegisterScreen.route) {
+                    navController.navigate(Graph.HOME) {
+                        popUpTo(AuthScreen.RegisterAuthScreen.route) {
                             inclusive = true
                         }
-                        popUpTo(Screen.LoginScreen.route) {
+                        popUpTo(AuthScreen.LoginAuthScreen.route) {
                             inclusive = true
                         }
                     }

@@ -37,7 +37,8 @@ import com.example.radioserch.features.common.IconApp
 import com.example.radioserch.features.common.TextQuestion
 import com.example.radioserch.features.dialog.DialogApp
 import com.example.radioserch.features.login.presentation.LoginViewModel
-import com.example.radioserch.features.navigation.Screen
+import com.example.radioserch.features.navigation.util.AuthScreen
+import com.example.radioserch.features.navigation.util.Graph
 
 @Composable
 fun Login(
@@ -116,7 +117,7 @@ fun FormUserLoginIn(
             navController = navController,
             text1 = stringResource(id = R.string.text_register),
             text2 = stringResource(id = R.string.text_register_here),
-            routeScreen = Screen.RegisterScreen.route
+            routeScreen = AuthScreen.RegisterAuthScreen.route
         )
         Spacer(modifier = Modifier.padding(20.dp))
 
@@ -154,7 +155,7 @@ fun FormUserLoginIn(
                     password = password,
                     success = {
                         navController.popBackStack()
-                        navController.navigate(Screen.HomeScreen.route)
+                        navController.navigate(Graph.HOME)
                     }
                 )
             }

@@ -11,7 +11,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.radioserch.features.navigation.NavigationApp
+import androidx.navigation.compose.rememberNavController
+import com.example.radioserch.features.navigation.RootNavigationGraph
 import com.example.radioserch.ui.theme.RadioSerchTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +39,7 @@ fun RadioApp() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NavigationApp()
+        RootNavigationGraph(rememberNavController())
     }
 
 }

@@ -28,7 +28,8 @@ import androidx.navigation.NavController
 import com.example.radioserch.R
 import com.example.radioserch.features.dialog.DialogApp
 import com.example.radioserch.features.login.presentation.LoginViewModel
-import com.example.radioserch.features.navigation.Screen
+import com.example.radioserch.features.navigation.util.AuthScreen
+import com.example.radioserch.features.navigation.util.Graph
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -51,7 +52,7 @@ fun LoginWithGoogle(navController: NavController, viewModel: LoginViewModel) {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 viewModel.userLoginWithGoogleCredential(credential) {
                     navController.popBackStack()
-                    navController.navigate(Screen.HomeScreen.route)
+                    navController.navigate(Graph.HOME)
                 }
             }
         } catch (error: Exception) {

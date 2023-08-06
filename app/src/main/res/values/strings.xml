@@ -21,4 +21,9 @@
     <string name="title_dialog">Hubo un problema</string>
     <string name="body_dialog">Se produjo un error. Por favor intenta de nuevo en un momento.</string>
 
+    <!--bottom bar-->
+    <string name="item_home">Inicio</string>
+    <string name="item_search">Buscar</string>
+    <string name="item_library_music">Tu música</string>
+
 </resources>
