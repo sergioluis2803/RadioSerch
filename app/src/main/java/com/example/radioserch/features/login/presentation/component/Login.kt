@@ -87,9 +87,8 @@ fun FormUserLoginIn(
     modifier: Modifier = Modifier
 ) {
 
-    val email by viewModel.email.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
-    val loginEnabled by viewModel.loginEnabled.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
 
@@ -122,9 +121,9 @@ fun FormUserLoginIn(
         Spacer(modifier = Modifier.padding(20.dp))
 
         CustomStyleTextField(
-            text = email,
+            text = uiState.emailInput,
             labelText = stringResource(id = R.string.text_field_email),
-            onValueChanged = { viewModel.onLoginChanged(it, password) },
+            onValueChanged = { viewModel.onLoginChanged(it, uiState.passwordInput) },
             keyboardType = KeyboardType.Email,
             iconTextField = Icons.Default.Email,
             isTextPassword = false,
@@ -133,9 +132,9 @@ fun FormUserLoginIn(
         Spacer(modifier = Modifier.padding(8.dp))
 
         CustomStyleTextField(
-            text = password,
+            text = uiState.passwordInput,
             labelText = stringResource(id = R.string.text_field_password),
-            onValueChanged = { viewModel.onLoginChanged(email, it) },
+            onValueChanged = { viewModel.onLoginChanged(uiState.emailInput, it) },
             keyboardType = KeyboardType.Password,
             iconTextField = Icons.Default.Lock,
             isTextPassword = true,
@@ -147,12 +146,12 @@ fun FormUserLoginIn(
             CustomStyleProgressIndicator()
         } else {
             CustomStyleButton(
-                loginEnabled = loginEnabled,
+                loginEnabled = uiState.loginEnabled,
                 textButton = stringResource(id = R.string.button_login)
             ) {
                 viewModel.userOnLogin(
-                    email = email,
-                    password = password,
+                    email = uiState.emailInput,
+                    password = uiState.passwordInput,
                     success = {
                         navController.popBackStack()
                         navController.navigate(Graph.HOME)

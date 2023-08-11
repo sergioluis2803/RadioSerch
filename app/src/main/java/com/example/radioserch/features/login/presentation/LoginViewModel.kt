@@ -6,12 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.radioserch.features.login.domain.use_case.CreateUser
 import com.example.radioserch.features.login.domain.use_case.UserLoginEmailPassword
 import com.example.radioserch.features.login.domain.use_case.UserLoginGoogleCredential
+import com.example.radioserch.features.login.util.HomeViewModelState
 import com.example.radioserch.features.login.util.ResultState
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,14 +27,12 @@ class LoginViewModel @Inject constructor(
     private val createUserUseCase: CreateUser
 ) : ViewModel() {
 
-    private val _email = MutableStateFlow("")
-    val email: StateFlow<String> = _email
+    private val viewModelState = MutableStateFlow(HomeViewModelState())
+    val uiState = viewModelState
+        .map(HomeViewModelState::toUiState)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, viewModelState.value.toUiState())
 
-    private val _password = MutableStateFlow("")
-    val password: StateFlow<String> = _password
-
-    private val _loginEnabled = MutableStateFlow(false)
-    val loginEnabled: StateFlow<Boolean> = _loginEnabled
+    
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -43,9 +46,13 @@ class LoginViewModel @Inject constructor(
         Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
     fun onLoginChanged(email: String, password: String) {
-        _email.value = email
-        _password.value = password
-        _loginEnabled.value = isValidEmail(email) && isValidPassword(password)
+        viewModelState.update {
+            it.copy(
+                emailInput = email,
+                passwordInput = password,
+                loginEnabled = isValidEmail(email) && isValidPassword(password)
+            )
+        }
     }
 
     fun dismissErrorDialog() {
