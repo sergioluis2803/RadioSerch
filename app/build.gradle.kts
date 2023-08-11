@@ -66,7 +66,7 @@ dependencies {
 
     //Firebase services
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
-    implementation("com.google.firebase:firebase-auth-ktx:22.1.0")
+    implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
     implementation("com.google.firebase:firebase-firestore-ktx:24.7.0")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
@@ -80,7 +80,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
 
     //icons extension
-    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.compose.material:material-icons-extended:1.5.0")
 
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.44")
