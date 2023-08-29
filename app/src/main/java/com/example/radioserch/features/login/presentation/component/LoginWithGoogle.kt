@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,9 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.radioserch.R
-import com.example.radioserch.features.dialog.DialogApp
+import com.example.radioserch.ui.components.DialogApp
 import com.example.radioserch.features.login.presentation.LoginViewModel
-import com.example.radioserch.features.navigation.util.AuthScreen
 import com.example.radioserch.features.navigation.util.Graph
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -40,7 +40,7 @@ fun LoginWithGoogle(navController: NavController, viewModel: LoginViewModel) {
     val token = stringResource(id = R.string.default_web_client_id)
     val context = LocalContext.current
 
-    val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -60,7 +60,7 @@ fun LoginWithGoogle(navController: NavController, viewModel: LoginViewModel) {
         }
     }
 
-    if (showErrorDialog.value) {
+    if (uiState.showError) {
         DialogApp { viewModel.dismissErrorDialog() }
     }
 

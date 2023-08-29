@@ -16,9 +16,14 @@ class AuthRepositoryImpl @Inject constructor(
             trySend(ResultState.Loading)
 
             auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    trySend(ResultState.Success("Login successfully"))
-                }.addOnFailureListener {
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        trySend(ResultState.Success("Account created successfully"))
+                    } else {
+                        trySend(ResultState.Error(task.exception ?: Exception("Unknown error")))
+                    }
+                }
+                .addOnFailureListener {
                     trySend(ResultState.Error(it))
                 }
             awaitClose {
@@ -26,13 +31,18 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+
     override fun signInUser(email: String, password: String): Flow<ResultState<String>> =
         callbackFlow {
             trySend(ResultState.Loading)
 
             auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    trySend(ResultState.Success("Login successfully"))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        trySend(ResultState.Success("Login successfully"))
+                    } else {
+                        trySend(ResultState.Error(task.exception ?: Exception("Unknown error")))
+                    }
                 }.addOnFailureListener {
                     trySend(ResultState.Error(it))
                 }
@@ -46,8 +56,12 @@ class AuthRepositoryImpl @Inject constructor(
             trySend(ResultState.Loading)
 
             auth.signInWithCredential(credential)
-                .addOnCompleteListener {
-                    trySend(ResultState.Success("Login with google successfully"))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        trySend(ResultState.Success("Login with google successfully"))
+                    } else {
+                        trySend(ResultState.Error(task.exception ?: Exception("Unknown error")))
+                    }
                 }.addOnFailureListener {
                     trySend(ResultState.Error(it))
                 }

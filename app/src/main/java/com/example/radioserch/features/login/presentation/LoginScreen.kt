@@ -1,7 +1,6 @@
 package com.example.radioserch.features.login.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,15 +25,11 @@ fun LoginScreen(
         tileMode = TileMode.Decal
     )
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Login(
-            viewModel,
-            navController,
-            Modifier
-                .fillMaxSize()
-                .background(brush = gradientBrush)
-        )
-    }
+    Login(
+        viewModel,
+        navController,
+        Modifier
+            .fillMaxSize()
+            .background(brush = gradientBrush)
+    )
 }

@@ -1,4 +1,4 @@
-package com.example.radioserch.features.dialog
+package com.example.radioserch.ui.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

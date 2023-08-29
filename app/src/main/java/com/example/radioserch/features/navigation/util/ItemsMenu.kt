@@ -15,7 +15,6 @@ sealed class ItemsMenu(
     object ItemHome : ItemsMenu(Icons.Default.Home, R.string.item_home, "ITEM_HOME")
     object ItemSearch :
         ItemsMenu(Icons.Default.YoutubeSearchedFor, R.string.item_search, "ITEM_SEARCH")
-
     object ItemLibraryMusic :
         ItemsMenu(Icons.Default.LibraryMusic, R.string.item_library_music, "ITEM_LIBRARY")
 }

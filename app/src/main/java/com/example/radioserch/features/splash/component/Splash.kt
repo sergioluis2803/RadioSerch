@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.example.radioserch.R
-import com.example.radioserch.features.common.IconApp
+import com.example.radioserch.ui.components.IconApp
 
 @Composable
 fun Splash() {
@@ -35,6 +35,7 @@ fun Splash() {
             )
         )
     }
+
 
     Surface(
         modifier = Modifier

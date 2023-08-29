@@ -8,12 +8,13 @@ import com.example.radioserch.features.login.domain.use_case.UserLoginEmailPassw
 import com.example.radioserch.features.login.domain.use_case.UserLoginGoogleCredential
 import com.example.radioserch.features.login.util.HomeViewModelState
 import com.example.radioserch.features.login.util.ResultState
+import com.example.radioserch.util.AppPreferences
+import com.example.radioserch.util.Constant
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -24,21 +25,14 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val sigInEmailPasswordUseCase: UserLoginEmailPassword,
     private val signInGoogleUseCase: UserLoginGoogleCredential,
-    private val createUserUseCase: CreateUser
+    private val createUserUseCase: CreateUser,
+    private val preferences: AppPreferences
 ) : ViewModel() {
 
     private val viewModelState = MutableStateFlow(HomeViewModelState())
     val uiState = viewModelState
         .map(HomeViewModelState::toUiState)
         .stateIn(viewModelScope, SharingStarted.Eagerly, viewModelState.value.toUiState())
-
-    
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val _showErrorDialog = MutableStateFlow(false)
-    val showErrorDialog: StateFlow<Boolean> = _showErrorDialog
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6
 
@@ -56,20 +50,21 @@ class LoginViewModel @Inject constructor(
     }
 
     fun dismissErrorDialog() {
-        _showErrorDialog.value = false
+        viewModelState.update { it.copy(showError = false) }
     }
 
     fun createUserEmailPassword(email: String, password: String, success: () -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
-            createUserUseCase.invoke(email, password).collect {
-                when (it) {
+            createUserUseCase.invoke(email, password).collect { resultState ->
+                when (resultState) {
                     is ResultState.Success -> {
-                        _isLoading.value = !_isLoading.value
+                        viewModelState.update { it.copy(isButtonLoading = true) }
                         success()
+                        preferences.savePreference(Constant.USER_LOGIN, true)
                     }
 
-                    is ResultState.Error -> _showErrorDialog.value = true
-                    is ResultState.Loading -> _isLoading.value = true
+                    is ResultState.Error -> viewModelState.update { it.copy(showError = true) }
+                    is ResultState.Loading -> viewModelState.update { it.copy(isButtonLoading = true) }
                 }
             }
         }
@@ -77,15 +72,18 @@ class LoginViewModel @Inject constructor(
 
     fun userOnLogin(email: String, password: String, success: () -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
-            sigInEmailPasswordUseCase.invoke(email, password).collect {
-                when (it) {
+            sigInEmailPasswordUseCase.invoke(email, password).collect { resultState ->
+                when (resultState) {
                     is ResultState.Success -> {
-                        _isLoading.value = !_isLoading.value
                         success()
+                        preferences.savePreference(Constant.USER_LOGIN, true)
                     }
 
-                    is ResultState.Error -> _showErrorDialog.value = true
-                    is ResultState.Loading -> _isLoading.value = true
+                    is ResultState.Error ->
+                        viewModelState.update { it.copy(showError = true, isButtonLoading = false) }
+
+                    is ResultState.Loading ->
+                        viewModelState.update { it.copy(isButtonLoading = true) }
                 }
             }
         }
@@ -93,15 +91,15 @@ class LoginViewModel @Inject constructor(
 
     fun userLoginWithGoogleCredential(credential: AuthCredential, home: () -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
-            signInGoogleUseCase.invoke(credential).collect {
-                when (it) {
+            signInGoogleUseCase.invoke(credential).collect { resultState ->
+                when (resultState) {
                     is ResultState.Success -> {
-                        _isLoading.value = !_isLoading.value
+                        viewModelState.update { it.copy(isButtonLoading = true) }
                         home()
                     }
 
-                    is ResultState.Error -> _showErrorDialog.value = true
-                    is ResultState.Loading -> _isLoading.value = true
+                    is ResultState.Error -> viewModelState.update { it.copy(showError = true) }
+                    is ResultState.Loading -> viewModelState.update { it.copy(isButtonLoading = true) }
                 }
             }
         }

@@ -30,12 +30,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.radioserch.R
-import com.example.radioserch.features.dialog.DialogApp
-import com.example.radioserch.features.common.CustomStyleTextField
-import com.example.radioserch.features.common.IconApp
-import com.example.radioserch.features.common.CustomStyleButton
-import com.example.radioserch.features.common.CustomStyleProgressIndicator
-import com.example.radioserch.features.common.TextQuestion
+import com.example.radioserch.ui.components.DialogApp
+import com.example.radioserch.ui.components.CustomStyleTextField
+import com.example.radioserch.ui.components.IconApp
+import com.example.radioserch.ui.components.CustomStyleButton
+import com.example.radioserch.ui.components.CustomStyleProgressIndicator
+import com.example.radioserch.ui.components.TextQuestion
 import com.example.radioserch.features.login.presentation.LoginViewModel
 import com.example.radioserch.features.navigation.util.AuthScreen
 import com.example.radioserch.features.navigation.util.Graph
@@ -89,13 +89,9 @@ fun FormUserRegister(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-    val showErrorDialog = viewModel.showErrorDialog.collectAsStateWithLifecycle()
-
     val passwordVisibility = mutableStateOf(false)
 
-    if (showErrorDialog.value) {
+    if (uiState.showError) {
         DialogApp { viewModel.dismissErrorDialog() }
     }
 
@@ -148,7 +144,7 @@ fun FormUserRegister(
         )
         Spacer(modifier = Modifier.padding(20.dp))
 
-        if (isLoading) {
+        if (uiState.isButtonLoading) {
             CustomStyleProgressIndicator()
         } else {
             CustomStyleButton(

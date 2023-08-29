@@ -5,7 +5,8 @@ data class HomeViewModelState(
     val loginEnabled: Boolean = false,
     val isButtonLoading: Boolean = false,
     val emailInput: String = "",
-    val passwordInput: String = ""
+    val passwordInput: String = "",
+    val showError: Boolean = false
 ) {
     fun toUiState(): HomeUiState = if (loginCredential) {
         HomeUiState.HomeLogin(
@@ -13,14 +14,16 @@ data class HomeViewModelState(
             loginEnabled = loginEnabled,
             isButtonLoading = isButtonLoading,
             emailInput = emailInput,
-            passwordInput = passwordInput
+            passwordInput = passwordInput,
+            showError = showError
         )
     } else {
         HomeUiState.HomeRegister(
             loginEnabled = loginEnabled,
             isButtonLoading = isButtonLoading,
             emailInput = emailInput,
-            passwordInput = passwordInput
+            passwordInput = passwordInput,
+            showError = showError
         )
     }
 }

@@ -17,7 +17,7 @@
     <string name="text_help_password">Ingresar mínimo 6 caracteres </string>
 
     <!--messages error-->
-    <string name="again">Reintentar</string>
+    <string name="again">Aceptar</string>
     <string name="title_dialog">Hubo un problema</string>
     <string name="body_dialog">Se produjo un error. Por favor intenta de nuevo en un momento.</string>
 
